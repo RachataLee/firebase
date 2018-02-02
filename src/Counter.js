@@ -9,9 +9,13 @@ class Counter extends Component {
     }
     componentDidMount(){
         let self = this;
-        db.collection('counter').doc(this.props.match.params.id).get().then( snapshot => {
+        db.collection('counter').doc(this.props.match.params.id).onSnapshot( snapshot => {
         self.setState(snapshot.data());
         })
+    }
+    inc = () => {
+        let counter = {name: this.state.name, value: this.state.value + 1}
+        db.collection('counter').doc(this.props.match.params.id).set(counter);
     }
   render() {
       console.log(this.state.value)
@@ -22,6 +26,8 @@ class Counter extends Component {
         {this.state.name}
         <br/>
         {this.state.value}
+        <br/>
+        <button onClick={this.inc}>Add</button>
       </div>
     );
   }
